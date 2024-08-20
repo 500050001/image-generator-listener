@@ -1,14 +1,12 @@
 require("@nomiclabs/hardhat-waffle");
 
-const { INFURA_PROJECT_ID, DEPLOYER_PRIVATE_KEY } = process.env;
-
 module.exports = {
-  solidity: "0.8.0",
+  solidity: "0.8.0",  // Specify your Solidity version
   networks: {
-    goerli: {
-      url: `https://sepolia.infura.io/v3/6e8ee0b6eb3d4b5f8c403d2780293b0f`,
-      accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
-    },
-    // other networks...
+    sepolia: {  // Configure Sepolia network
+      url: `https://sepolia.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,  // Use Sepolia's Infura endpoint
+      accounts: [`0x${process.env.DEPLOYER_PRIVATE_KEY}`]  // Your private key with '0x' prefix
+    }
   }
 };
+
