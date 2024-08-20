@@ -1,23 +1,39 @@
-name: Run Listener
+name: Deploy Listener and Smart Contract
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: |
+        npm install
+        cd hardhat
+        npm install
 
-      - name: Run listener
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
-        run: node listener.js
+    - name: Deploy Smart Contract
+      run: |
+        cd hardhat
+        npx hardhat run scripts/deploy.js --network rinkeby
+      env:
+        INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+
+    - name: Deploy Listener
+      run: |
+        node listener.js
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
