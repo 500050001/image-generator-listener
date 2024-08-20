@@ -25,15 +25,16 @@ jobs:
     - name: Deploy Smart Contract
       run: |
         cd hardhat
-        npx hardhat run scripts/deploy.js --network rinkeby
-      env:
-        INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
-        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+        npx hardhat run scripts/deploy.js --network goerli  # Use Goerli network
+   env:
+     INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+     DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
 
     - name: Deploy Listener
       run: |
-        cd hardhat
-        node ../listener.js  # Assuming listener.js is in the root
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+        node listener.js
+   env:
+     INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+     DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
