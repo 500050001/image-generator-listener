@@ -15,11 +15,10 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'
+        node-version: '16'  # Upgrade to Node.js v16
 
-    - name: Install dependencies
+    - name: Install Hardhat dependencies
       run: |
-        npm install
         cd hardhat
         npm install
 
@@ -33,7 +32,8 @@ jobs:
 
     - name: Deploy Listener
       run: |
-        node listener.js
+        cd hardhat
+        node ../listener.js  # Assuming listener.js is in the root
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
