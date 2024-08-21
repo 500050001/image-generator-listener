@@ -1,10 +1,9 @@
 async function main() {
-  const ImageRequest = await ethers.getContractFactory("ImageRequest");
-  const contract = await ImageRequest.deploy();
+  const [deployer] = await ethers.getSigners();
+  console.log("Deploying contracts with the account:", deployer.address);
 
-  await contract.deployed();
-
-  console.log("Contract deployed to:", contract.address);
+  const balance = await deployer.getBalance();
+  console.log("Account balance:", balance.toString());
 }
 
 main()
