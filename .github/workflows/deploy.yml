@@ -1,4 +1,4 @@
-name: Simplified Debugging Workflow
+name: Minimal Workflow
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,10 +16,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'  # Use Node.js v14 which is supported by Hardhat
+          node-version: '14'  # Ensure a supported Node.js version for Hardhat
 
-      - name: Check Node.js Version
-        run: node -v
+      - name: Echo Test
+        run: echo "GitHub Actions is running successfully"
 
       - name: Debug Private Key Length
         run: echo "Private Key Length: ${#DEPLOYER_PRIVATE_KEY}"
@@ -37,8 +37,7 @@ jobs:
           npx hardhat --version
 
       - name: Install Dependencies
-        run: |
-          npm install
+        run: npm install
 
       - name: Run Basic Hardhat Command
         run: npx hardhat help
