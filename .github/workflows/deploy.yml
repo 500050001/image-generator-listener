@@ -18,6 +18,11 @@ jobs:
         with:
           node-version: '16'  # Use Node.js v16 or any version you prefer
 
+      - name: Debug Key Length
+        run: echo "Key length: ${#DEPLOYER_PRIVATE_KEY}"
+        env:
+          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+
       - name: Install Hardhat dependencies
         run: |
           cd hardhat
