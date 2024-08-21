@@ -16,11 +16,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '14'  # Switching to a Hardhat-supported Node.js version
 
-      - name: Debug Key Presence
+      - name: Debug Private Key Length
         run: |
-          if [ -z "${{ secrets.DEPLOYER_PRIVATE_KEY }}" ]; then echo "Key is missing or empty"; else echo "Key is present"; fi
+          echo "Private Key Length: ${#DEPLOYER_PRIVATE_KEY}"
+        env:
+          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+
+      - name: Echo Private Key Start and End (Safe)
+        run: echo "Key start: ${DEPLOYER_PRIVATE_KEY:0:4}, Key end: ${DEPLOYER_PRIVATE_KEY: -4}"
+        env:
+          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
 
       - name: Install Hardhat dependencies
         run: |
