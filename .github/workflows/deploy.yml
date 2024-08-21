@@ -28,5 +28,5 @@ jobs:
           cd hardhat
           npx hardhat run scripts/deploy.js --network sepolia
         env:
-          INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
-          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+          INFURA_PROJECT_ID: ${{ 6e8ee0b6eb3d4b5f8c403d2780293b0f }}
+          DEPLOYER_PRIVATE_KEY: ${{ e044651b6913502676380008e40bae161960dee6812471e7c12efd03e78adb93 }}
