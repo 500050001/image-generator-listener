@@ -18,9 +18,10 @@ jobs:
         with:
           node-version: '16'  # Use Node.js v16 or any version you prefer
 
-      - name: Debug Key Length
-        run: echo "Key length: $(echo -n $DEPLOYER_PRIVATE_KEY | wc -c)"
-        env:
+      - name: Debug Key Presence
+        run: |
+    if [ -z "${DEPLOYER_PRIVATE_KEY}" ]; then echo "Key is missing or empty"; else echo "Key is present"; fi
+  env:
           DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
 
       - name: Install Hardhat dependencies
