@@ -5,7 +5,7 @@ module.exports = {
   networks: {
     sepolia: {
       url: `https://sepolia.infura.io/v3/6e8ee0b6eb3d4b5f8c403d2780293b0f`,
-      accounts: [`e044651b6913502676380008e40bae161960dee6812471e7c12efd03e78adb93`],
+      accounts: [`0xe044651b6913502676380008e40bae161960dee6812471e7c12efd03e78adb93`],
     },
   },
 };
