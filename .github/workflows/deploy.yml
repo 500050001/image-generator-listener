@@ -1,12 +1,13 @@
-name: Deploy Smart Contract
+name: Compile, Deploy, and Run Listener
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,15 +19,47 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Hardhat dependencies
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
         run: |
-          cd hardhat
           npm install
 
-      - name: Check Account Balance
+      - name: Compile Contracts
+        run: |
+          cd hardhat
+          npx hardhat compile
+
+      - name: Run Tests
+        run: |
+          cd hardhat
+          npx hardhat test
+
+      - name: Deploy Smart Contract
         run: |
           cd hardhat
           npx hardhat run scripts/deploy.js --network sepolia
         env:
-          INFURA_PROJECT_ID: "6e8ee0b6eb3d4b5f8c403d2780293b0f"
-          DEPLOYER_PRIVATE_KEY: "e044651b6913502676380008e40bae161960dee6812471e7c12efd03e78adb93"
+          INFURA_PROJECT_ID: "6e8ee0b6eb3d4b5f8c403d2780293b0f"  # Hardcoded Infura Project ID
+          DEPLOYER_PRIVATE_KEY: "0xabc1234yourprivatekeyhere5678"  # Hardcoded Deployer Private Key
+
+      - name: Run Listener
+        run: |
+          node listener.js
+        env:
+          INFURA_PROJECT_ID: "6e8ee0b6eb3d4b5f8c403d2780293b0f"  # Reuse Hardcoded Infura Project ID
+          DEPLOYER_PRIVATE_KEY: "e044651b6913502676380008e40bae161960dee6812471e7c12efd03e78adb93"  # Reuse Hardcoded Deployer Private Key
+
+      - name: Notify Success
+        if: success()
+        run: echo "Compilation, deployment, and listener execution succeeded!"
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "Compilation, deployment, or listener execution failed."
