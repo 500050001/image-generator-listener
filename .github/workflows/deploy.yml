@@ -16,18 +16,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'  # Ensure a supported Node.js version for Hardhat
+          node-version: '14'  # Supported Node.js version for Hardhat
 
       - name: Echo Test
         run: echo "GitHub Actions is running successfully"
 
       - name: Debug Private Key Length
-        run: echo "Private Key Length: ${#DEPLOYER_PRIVATE_KEY}"
+        run: |
+          echo "Private Key Length: ${#DEPLOYER_PRIVATE_KEY}"
         env:
           DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
 
       - name: Print Private Key Start and End (Safe)
-        run: echo "Key start: ${DEPLOYER_PRIVATE_KEY:0:4}, Key end: ${DEPLOYER_PRIVATE_KEY: -4}"
+        run: |
+          echo "Key start: ${DEPLOYER_PRIVATE_KEY:0:4}, Key end: ${DEPLOYER_PRIVATE_KEY: -4}"
         env:
           DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
           
@@ -37,7 +39,9 @@ jobs:
           npx hardhat --version
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          npm install
 
       - name: Run Basic Hardhat Command
-        run: npx hardhat help
+        run: |
+          npx hardhat help
