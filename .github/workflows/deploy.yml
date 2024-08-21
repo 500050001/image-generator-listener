@@ -1,49 +1,7 @@
-name: Compile, Deploy, and Run Listener
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'  # Node.js version compatible with Hardhat
-
-      - name: Debug Key Presence
-        run: |
-          if [ -z "${{ secrets.DEPLOYER_PRIVATE_KEY }}" ]; then echo "Key is missing or empty"; else echo "Key is present"; fi
-
-      - name: Install Hardhat dependencies
-        run: |
-          cd hardhat
-          npm install  # Install dependencies within the hardhat directory
-
-      - name: Compile Smart Contracts
-        run: |
-          cd hardhat
-          npx hardhat compile  # Compile contracts after navigating to the hardhat directory
-
-      - name: Deploy Smart Contract
-        run: |
-          cd hardhat
-          npx hardhat run scripts/deploy.js --network sepolia  # Deploy to Sepolia network
-        env:
-          INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
-          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
-
-      - name: Deploy Listener
-        run: |
-          node listener.js  # Assuming listener.js is in the root directory
-        env:
-          INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
-          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+- name: Deploy Smart Contract
+  run: |
+    cd hardhat
+    npx hardhat run scripts/deploy.js --network sepolia
+  env:
+    INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+    DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
