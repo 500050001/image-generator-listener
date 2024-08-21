@@ -1,4 +1,4 @@
-name: Minimal Workflow
+name: Compile, Deploy, and Run Listener
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,31 +16,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'  # Supported Node.js version for Hardhat
+          node-version: '18'  # Use Node.js 18 for compatibility
 
-      - name: Echo Test
-        run: echo "GitHub Actions is running successfully"
-
-      - name: Debug Private Key Length
-        run: |
-          echo "Private Key Length: ${#DEPLOYER_PRIVATE_KEY}"
-        env:
-          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
-
-      - name: Print Private Key Start and End (Safe)
-        run: |
-          echo "Key start: ${DEPLOYER_PRIVATE_KEY:0:4}, Key end: ${DEPLOYER_PRIVATE_KEY: -4}"
-        env:
-          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
-          
-      - name: Basic Hardhat Version Check
-        run: |
-          npm install --save-dev hardhat@latest
-          npx hardhat --version
+      - name: Navigate to Hardhat Project Directory
+        run: cd hardhat  # Ensure you're in the correct directory
 
       - name: Install Dependencies
         run: |
-          npm install
+          npm install  # Ensure package.json exists and install dependencies
+
+      - name: Compile Smart Contracts
+        run: |
+          npx hardhat compile  # Compile contracts after navigating to correct directory
 
       - name: Run Basic Hardhat Command
         run: |
