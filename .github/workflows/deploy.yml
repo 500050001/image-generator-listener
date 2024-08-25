@@ -23,17 +23,16 @@ jobs:
         cd hardhat
         npm install
 
+    - name: Log deployment details
+      run: |
+        echo "Preparing to deploy..."
+        echo "INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}"
+        echo "DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}"
+
     - name: Deploy Smart Contract
       run: |
         cd hardhat
         npx hardhat run scripts/deploy.js --network sepolia
-
-    - name: Log deployment details
-      run: |
-        echo "Deployment finished"
-        echo "INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}"
-        echo "DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}"
-        cat hardhat/deploy.log || echo "No deploy log found"
 
     - name: Save deployment log
       run: |
