@@ -10,32 +10,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
 
-      - name: Install Dependencies
-        run: |
-          cd hardhat
-          npm install
+    - name: Install dependencies
+      run: |
+        cd hardhat
+        npm install
 
-      - name: Compile Contracts
-        run: |
-          cd hardhat
-          npx hardhat compile
+    - name: Deploy Smart Contract
+      run: |
+        cd hardhat
+        npx hardhat run scripts/deploy.js --network sepolia
 
-      - name: Deploy Smart Contract
-        run: |
-          cd hardhat
-          npx hardhat run scripts/deploy.js --network sepolia
-        env:
-          INFURA_PROJECT_ID: "6e8ee0b6eb3d4b5f8c403d2780293b0f"
-          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+    - name: Log deployment details
+      run: |
+        echo "Deployment finished"
+        echo "INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}"
+        echo "DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}"
+        cat hardhat/deploy.log || echo "No deploy log found"
 
-      - name: Start Listener
-        run: |
-          node listener.js
+    - name: Save deployment log
+      run: |
+        cd hardhat
+        mkdir -p deploy_logs
+        npx hardhat run scripts/deploy.js --network sepolia > deploy_logs/deploy.log
+      continue-on-error: true
+
+    - name: Upload deployment log as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: deploy-log
+        path: hardhat/deploy_logs/deploy.log
