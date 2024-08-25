@@ -1,4 +1,4 @@
-name: Compile, Deploy, and Run Listener
+name: Deploy Contract
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup Node.js
+    - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '18'
@@ -23,29 +23,19 @@ jobs:
         cd hardhat
         npm install
 
-    - name: Log deployment details
+    - name: Log Secret Values (for debugging)
       run: |
-        INFURA_PROJECT_ID="${{ secrets.INFURA_PROJECT_ID }}"
-        DEPLOYER_PRIVATE_KEY="${{ secrets.DEPLOYER_PRIVATE_KEY }}"
-
         echo "Preparing to deploy..."
         echo "INFURA_PROJECT_ID: ${INFURA_PROJECT_ID:0:4}...${INFURA_PROJECT_ID: -4} (Length: ${#INFURA_PROJECT_ID} characters)"
-        echo "DEPLOYER_PRIVATE_KEY: ${DEPLOYER_PRIVATE_KEY:0:4}...${DEPLOYER_PRIVATE_KEY: -4} (Length: ${#DEPLOYER_PRIVATE_KEY} characters)"
+        echo "DEPLOYER_PRIVATE_KEY: ${DEPLOYER_PRIVATE_KEY:0:6}...${DEPLOYER_PRIVATE_KEY: -4} (Length: ${#DEPLOYER_PRIVATE_KEY} characters)"
+      env:
+        INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
 
     - name: Deploy Smart Contract
       run: |
         cd hardhat
         npx hardhat run scripts/deploy.js --network sepolia
-
-    - name: Save deployment log
-      run: |
-        cd hardhat
-        mkdir -p deploy_logs
-        npx hardhat run scripts/deploy.js --network sepolia > deploy_logs/deploy.log
-      continue-on-error: true
-
-    - name: Upload deployment log as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: deploy-log
-        path: hardhat/deploy_logs/deploy.log
+      env:
+        INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
