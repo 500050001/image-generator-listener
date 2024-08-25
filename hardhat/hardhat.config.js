@@ -1,12 +1,12 @@
 require("@nomiclabs/hardhat-waffle");
 
 module.exports = {
-  solidity: "0.8.0",
+  defaultNetwork: "sepolia",
   networks: {
     sepolia: {
-      url: `https://sepolia.infura.io/v3/6e8ee0b6eb3d4b5f8c403d2780293b0f`,
-      accounts: [`${process.env.DEPLOYER_PRIVATE_KEY}'],
-    },
+      url: `https://sepolia.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      accounts: [process.env.DEPLOYER_PRIVATE_KEY] // No need to add `0x` again here
+    }
   },
+  solidity: "0.8.0",
 };
-
