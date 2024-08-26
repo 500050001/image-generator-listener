@@ -51,7 +51,7 @@ jobs:
         npx hardhat run scripts/deploy.js --network sepolia
       env:
         INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
-        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPRIVATA_KEY }}
 
     - name: Save ABI for Frontend
       run: |
