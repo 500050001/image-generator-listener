@@ -13,7 +13,7 @@ module.exports = {
   networks: {
     sepolia: {
       url: `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
-      accounts: [DEPLOYER_PRIVATE_KEY]
+      accounts: [DEPLOYER_PRIVATE_KEY] // No need to add 0x here since it's already included in the secret
     }
   },
   solidity: "0.8.0",
