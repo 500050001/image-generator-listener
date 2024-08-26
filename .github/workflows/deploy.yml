@@ -60,3 +60,7 @@ jobs:
       run: |
         mkdir -p docs
         cp hardhat/artifacts/contracts/ImageRequest.sol/ImageRequest.json docs/
+   
+    - name: Verify ABI Copy
+      run: |
+        ls -l docs/
