@@ -18,14 +18,6 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Cache Node.js modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
     - name: Install dependencies
       run: |
         cd hardhat
@@ -39,11 +31,23 @@ jobs:
       env:
         INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
         DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
-   
+
+    - name: Debug Environment Variables
+      run: |
+        cd hardhat
+        echo "INFURA_PROJECT_ID inside hardhat: $INFURA_PROJECT_ID"
+        echo "DEPLOYER_PRIVATE_KEY inside hardhat: $DEPLOYER_PRIVATE_KEY"
+      env:
+        INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+
     - name: Compile contracts
       run: |
         cd hardhat
         npx hardhat compile
+      env:
+        INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
 
     - name: Deploy Smart Contract
       run: |
@@ -51,7 +55,7 @@ jobs:
         npx hardhat run scripts/deploy.js --network sepolia
       env:
         INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
-        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPRIVATA_KEY }}
+        DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
 
     - name: Save ABI for Frontend
       run: |
