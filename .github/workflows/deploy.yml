@@ -55,9 +55,8 @@ jobs:
       env:
         INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
         DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
-
+        
     - name: Save ABI for Frontend
       run: |
-        mkdir -p ../frontend/src/abi
-        cp artifacts/contracts/ImageRequest.sol/ImageRequest.json ../frontend/src/abi/
-      working-directory: hardhat
+        mkdir -p docs
+        cp hardhat/artifacts/contracts/ImageRequest.sol/ImageRequest.json docs/
