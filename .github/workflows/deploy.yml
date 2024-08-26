@@ -59,4 +59,5 @@ jobs:
     - name: Save ABI for Frontend
       run: |
         mkdir -p ../frontend/src/abi
-        cp hardhat/artifacts/contracts/ImageRequest.sol/ImageRequest.json ../frontend/src/abi/
+        cp artifacts/contracts/ImageRequest.sol/ImageRequest.json ../frontend/src/abi/
+      working-directory: hardhat
